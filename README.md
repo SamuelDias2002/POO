@@ -1,2 +1,5 @@
 # POO
-POO
+
+- To use the file system:
+
+**PLEASE CHANGE THE FILE PATH FOR A PATH THAT YOU WANT TO USE**
