@@ -1,4 +1,3 @@
-
 public class ApagarException extends Exception {
 		public ApagarException() {
 			super();

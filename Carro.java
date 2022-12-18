@@ -1,9 +1,27 @@
-import java.util.Objects;
-
+import java.util.Date;
 public class Carro {
 		private String marca, modelo, alugado;
 		private int ano, km, cilindrada, potencia;
 		private double preco_compra, preco_aluguer;
+		private Date dataInicio;
+		private Date datafim;
+		
+		
+		public Date getDataInicio() {
+			return dataInicio;
+		}
+
+		public void setStartDate(Date dataInicio) {
+			this.dataInicio = dataInicio;
+		}
+
+		public Date getDatafim() {
+			return datafim;
+		}
+
+		public void setEndDate(Date datafim) {
+			this.datafim = datafim;
+		}
 		
 		public String getMarca() {
 			return marca;
@@ -61,9 +79,9 @@ public class Carro {
 		}
 		@Override
 		public String toString() {
-			return "Carro [marca=" + marca + ", modelo=" + modelo + ", alugado=" + alugado + ", ano=" + ano + ", km="
-					+ km + ", cilindrada=" + cilindrada + ", potencia=" + potencia + ", preco_compra=" + preco_compra
-					+ ", preco_aluguer=" + preco_aluguer + "]";
+			return "Carros\nMarca: " + marca + "\nModelo: " + modelo + "\nAlugado: " + alugado + "\nAno: " + ano + "\nKm: "
+					+ km + "\nCilindrada: " + cilindrada + "\nPotência: " + potencia + "\nPreço de compra: " + preco_compra
+					+ "\nPreço de aluguer: " + preco_aluguer + '}';
 		}
 		public Carro(String marca, String modelo, int ano, int km, int cilindrada, int potencia, double preco_compra,
 				double preco_aluguer) {
@@ -77,23 +95,6 @@ public class Carro {
 			this.preco_compra = preco_compra;
 			this.preco_aluguer = preco_aluguer;
 			this.alugado="Não alugado";
+			
 		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Carro other = (Carro) obj;
-			return Objects.equals(alugado, other.alugado) && ano == other.ano && cilindrada == other.cilindrada
-					&& km == other.km && Objects.equals(marca, other.marca) && Objects.equals(modelo, other.modelo)
-					&& potencia == other.potencia
-					&& Double.doubleToLongBits(preco_aluguer) == Double.doubleToLongBits(other.preco_aluguer)
-					&& Double.doubleToLongBits(preco_compra) == Double.doubleToLongBits(other.preco_compra);
-		}
-		
-		
 }
