@@ -26,7 +26,7 @@ public class FuncCarros{
 		Carro novoCarro = new Carro(marca,modelo,ano,km,cilindrada,potencia,preco_compra,preco_aluguer);
 		carros.add(novoCarro);
 		try {
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("D:\\Files POO\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
 			os.writeObject(carros);
 			os.flush();
 		} catch (IOException e) {
@@ -58,7 +58,8 @@ public class FuncCarros{
 				throw new ApagarException ("O carro" + marca + " " + modelo + "com as carateristicas pretendidas nao existe");
 			}
 		}
-		try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("D:\\Files POO\\Carros.dat"))) { // ALTEREM SEMPRE A VOSSA DIRETORIA
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Carros.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
 			os.writeObject(carros);
 			os.flush();
 		} catch (IOException e) {
@@ -78,7 +79,7 @@ public class FuncCarros{
 					System.out.println(carros.get(i).toString());
 				}
 			}		
-		} else if ( s.toLowerCase().equals("modelo")) {
+		} else if (s.toLowerCase().equals("modelo")) {
 			System.out.println("Indique o modelo");
 			String d = Ler.umaString();
 			for(int i=0;i<carros.size();i++) {
@@ -99,39 +100,72 @@ public class FuncCarros{
 		}
 	}
 
-	public static void alugar_Carro(ArrayList<Carro> carros) throws alugarExcecao{
-		System.out.println("Digite o id (indice) do carro que pretende alugar");
+	public static void alugar_Carro(ArrayList<Carro> carros, ArrayList<Cliente> clientes, int cliente) throws alugarExcecao{
+		System.out.println("Digite o id (índice da lista de carros) do carro que pretende alugar");
 		int id = Ler.umInt();
-		System.out.println("Tem a certeza que quer alugar este carro? Vai ter um custo de " + carros.get(id-1).getPreco_aluguer() +" por dia");
-		String sn = Ler.umaString();
-		if (sn.toLowerCase().equals("sim")) {
-			System.out.println("Quantos dias pertende alugar o carro?");
-			 dias = Ler.umInt();
-			 dataInicio = new Date();
-			carros.get(id-1).setAlugado("Alugado durante " +dias+" dias.");
-			System.out.println("O carro foi alugado às " + dataInicio + " por " + dias + " dias! ");
+		if(carros.size() > 0) {
+			System.out.println("Tem a certeza que quer alugar este carro? Vai ter um custo de " + carros.get(id).getPreco_aluguer() +" por dia");
+			String sn = Ler.umaString();
+			if (sn.toLowerCase().equals("sim")) {
+				System.out.println("Quantos dias pertende alugar o carro?");
+				dias = Ler.umInt();
+				dataInicio = new Date();
+				carros.get(id).setAlugado("Alugado durante " + dias +" dias.");
+				System.out.println("O carro foi alugado às " + dataInicio + " por " + dias + " dias!");
+				clientes.get(cliente).setCarro(carros.get(id));
+			}
+			else {
+				throw new alugarExcecao("O aluguer do carro foi cancelado.");
+			}
+		}else {
+			System.out.println("Lista de carros vazia.");
 		}
-		else {
-			throw new alugarExcecao("O aluguer do carro foi cancelado.");
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
+			os.writeObject(carros);
+			os.flush();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
 		}
-		
-
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
+			os.writeObject(clientes);
+			os.flush();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
-	public static void entregar_Carro(ArrayList<Carro> carros) throws EntregarException {
-		System.out.println("Digite o id (indice) do carro que pretende entregar");
-		int id = Ler.umInt();
-		if (carros.get(id-1).getAlugado().equals("Não Alugado")) {
-			throw new EntregarException("ERRO! Esse carro não estava alugado");
-		} else {
-			carros.get(id-1).setAlugado("Não alugado");
-			
-		}	
-		System.out.println("Entrega do " + carros.get(id-1).getMarca() + carros.get(id-1).getModelo() + " realizada com Sucesso!");
-	}
-
-	public static void pagar_Aluguer(ArrayList<Carro> carros) {
-		
+	public static void entregar_Carro(ArrayList<Carro> carros, ArrayList<Cliente> clientes, int cliente) throws EntregarException {
+		if(clientes.size() > 0 ) {
+			System.out.println("Digite o id (índice da lista de carros alugados do cliente) do carro que pretende entregar");
+			int id = Ler.umInt();
+			if(clientes.get(cliente).getCarrosAlugados().get(id).getAlugado().equals("Não Alugado")) {
+				throw new EntregarException("ERRO! Esse carro não estava alugado");
+			}else {
+				for(int i = 0; i < clientes.size(); i++) {
+					if(Carro.comparaCarro(clientes.get(i).getCarrosAlugados().get(id),(carros.get(i)))) {
+						carros.get(i).setAlugado("Não Alugado");
+						System.out.println("Entrega do " + carros.get(i).getMarca() + carros.get(i).getModelo() + " realizada com Sucesso!");
+					}
+				}
+				clientes.get(cliente).getCarrosAlugados().remove(id);
+			}
+		}
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
+			os.writeObject(carros);
+			os.flush();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
+			os.writeObject(clientes);
+			os.flush();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public static String mais_Alugado(ArrayList<Carro> carros) {

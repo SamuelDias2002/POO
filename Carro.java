@@ -1,5 +1,7 @@
+import java.io.Serializable;
 import java.util.Date;
-public class Carro {
+import java.io.Serializable;
+public class Carro implements Serializable{
 		private String marca, modelo, alugado;
 		private int ano, km, cilindrada, potencia;
 		private double preco_compra, preco_aluguer;
@@ -96,5 +98,14 @@ public class Carro {
 			this.preco_aluguer = preco_aluguer;
 			this.alugado="Não alugado";
 			
+		}
+		public static boolean comparaCarro(Carro carro1, Carro carro2) {
+			if(carro1.marca.equals(carro2.marca) && carro1.modelo.equals(carro2.modelo) && carro1.ano == carro2.ano &&
+			   carro1.km == carro2.km && carro1.cilindrada == carro2.cilindrada && carro1.potencia == carro2.potencia && 
+			   carro1.potencia == carro2.potencia && carro1.preco_aluguer == carro2.preco_aluguer && 
+			   carro1.preco_compra == carro2.preco_compra && carro1.alugado.equals(carro2.alugado)) {
+				return true;
+			}
+			return false;
 		}
 }

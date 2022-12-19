@@ -22,15 +22,18 @@ public class Agencia {
 		int opcao = 0;
 		ArrayList<Carro> carros = new ArrayList<Carro>();
 		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-		int cliente;
+		int cliente = 0;
 		try {//ler ficheiro dos carros
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream("D:\\Files POO\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("C:\\POOpratica\\MainProjeto\\src\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
+			carros = (ArrayList<Carro>) is.readObject();
 		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
 
 		try {//ler ficheiro dos clientes
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream("D:\\Files POO\\Carros.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("C:\\POOpratica\\MainProjeto\\src\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
 			clientes = (ArrayList<Cliente>) is.readObject();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -50,20 +53,22 @@ public class Agencia {
 			System.out.println("Digite o seu NIF: ");
 			int NIF = Ler.umInt();
 			clientes.add(new Cliente(nome,cidade,idade,NIF));
+			cliente = clientes.size() - 1;
 		}else {
 			System.out.println("Digite o seu nome: ");
 			String nome = Ler.umaString();
 			for(int i = 0; i < clientes.size(); i++) {
 				if(clientes.get(i).getNome().equals(nome)) {
 					cliente = i; //Cliente que está a alugar o carro -> clientes.get(cliente)
-					return;
+					System.out.println("Bem-vindo de volta " + clientes.get(i).getNome());
 				}else {
 					System.out.println("Ainda não pertence à lista de clientes da agência ou escreveu mal o seu nome!");
+					return ;
 				}
 			}
 		}
 		try {//escrever no ficheiro Clientes
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("D:\\Files POO\\Carros.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
 			os.writeObject(clientes);
 			os.flush();
 		} catch (IOException e) {
@@ -97,14 +102,14 @@ public class Agencia {
 				break;
 			case 8:
 				try {
-					FuncCarros.alugar_Carro(carros);
+					FuncCarros.alugar_Carro(carros, clientes, cliente);
 				} catch (alugarExcecao e) {
 					System.out.println(e.getMessage());
 				}
 				break;
 			case 9:
 				try {
-					FuncCarros.entregar_Carro(carros);
+					FuncCarros.entregar_Carro(carros, clientes, cliente);
 				} catch (EntregarException e) {
 					System.out.println(e.getMessage());
 				}
