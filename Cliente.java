@@ -19,7 +19,7 @@ public class Cliente implements Serializable{
 	public ArrayList<Carro> getCarrosAlugados(){
 		return carrosAlugados;
 	}
-	public void adicionarCarroAlugado(Carro carro) {
+	public void setCarro(Carro carro) {
 		carrosAlugados.add(carro);
 	}
 	@Override
