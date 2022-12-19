@@ -1,7 +1,11 @@
 import java.io.*;
 import java.util.ArrayList;
 public class Agencia {
-	public static int menu() { // função na classe do main
+	
+	/*
+	 * Menu que contem todas as opções que o utilizador pode usufruir
+	 */
+	public static int menu() {
 		int opcao;
 		System.out.println("\n1 - Novo carro");
 		System.out.println("2 - Listar todos os carros (todos ou apenas premium ou apenas comercial)");
@@ -12,38 +16,68 @@ public class Agencia {
 		System.out.println("7 – Consultar todos os carros alugados");
 		System.out.println("8 – Alugar carro");
 		System.out.println("9 - Entregar carro alugado anteriormente");
-		System.out.println("10 - Listar todos os clientes");
-		System.out.println("11 - Sair");
+		System.out.println("10 - Adicionar Cliente");
+		System.out.println("11 - Listar todos os clientes");
+		System.out.println("12 - Sair");
 		System.out.println("\nQual a sua opção:");
 		opcao = Ler.umInt();
 		return opcao;
 	}
-	public static void main(String[] args) {
+	/*
+	 * Classe Main:
+	 * Abre o ficheiros Carros e Clientes
+	 * Faz a questão inicial para verificar se o utilizador já é cliente e escreve no ficheiro clientes
+	 * Torna as opções do menu usáveis 
+	 */
+	public static void main(String[] args) throws clienteException{
 		int opcao = 0;
+	
 		ArrayList<Carro> carros = new ArrayList<Carro>();
 		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 		int cliente = 0;
-		try {//ler ficheiro dos carros
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream("C:\\POOpratica\\MainProjeto\\src\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
+		/*
+		 * Ler ficheiro Carros
+		 */
+		try {
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("D:\\\\Files POO\\\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
 			carros = (ArrayList<Carro>) is.readObject();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
-
-		try {//ler ficheiro dos clientes
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream("C:\\POOpratica\\MainProjeto\\src\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
+	/*
+	 * Ler ficheiro Clientes
+	 */
+		try {
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("D:\\Files POO\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
 			clientes = (ArrayList<Cliente>) is.readObject();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
-
-		System.out.println("Já pertence á lista de clientes da agência ?(Se sim digite S, caso contrário digite N) ");
+		/*
+		 * Verificar se é cliente (mas será que precisamos mesmo disto? Pois este menu vai ser dedicado a quem trabalha na Agencia)
+		 */
+		System.out.println("Já pertence á lista de clientes da agência?(Se sim digite Sim, caso contrário digite Nao) ");
 		String resposta = Ler.umaString();
-		if(resposta.equals("N")) {
+		if (resposta.toLowerCase().equals("sim")) {
+			System.out.println("Digite o seu nome:");
+			String nome = Ler.umaString();
+			if (clientes.size() < 0 ) {
+				for (int i = 0; i < clientes.size(); i++) {
+					if (clientes.get(i).getNome().equals(nome)) {
+						cliente = i; //Cliente que está a alugar o carro -> clientes.get(cliente)
+						System.out.println("Bem-vindo de volta " + clientes.get(i).getNome());
+					}
+				}
+			}
+			else {
+				throw new clienteException ("Não há clientes!");
+					}	
+		} else if (resposta.toLowerCase().equals("nao")) {
+
 			System.out.println("Digite o seu nome: ");
 			String nome = Ler.umaString();
 			System.out.println("Digite a sua cidade: ");
@@ -54,26 +88,22 @@ public class Agencia {
 			int NIF = Ler.umInt();
 			clientes.add(new Cliente(nome,cidade,idade,NIF));
 			cliente = clientes.size() - 1;
-		}else {
-			System.out.println("Digite o seu nome: ");
-			String nome = Ler.umaString();
-			for(int i = 0; i < clientes.size(); i++) {
-				if(clientes.get(i).getNome().equals(nome)) {
-					cliente = i; //Cliente que está a alugar o carro -> clientes.get(cliente)
-					System.out.println("Bem-vindo de volta " + clientes.get(i).getNome());
-				}else {
-					System.out.println("Ainda não pertence à lista de clientes da agência ou escreveu mal o seu nome!");
-					return ;
-				}
-			}
 		}
-		try {//escrever no ficheiro Clientes
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("C:\\POOpratica\\MainProjeto\\src\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
+		
+		/*
+		 * Escrever no ficheiro Clientes
+		 */
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("D:\\\\Files POO\\\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
 			os.writeObject(clientes);
 			os.flush();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+		
+		/*
+		 * Função que torna a opções dadas no menu usaveis
+		 */
 		do {
 			opcao = menu();
 			switch(opcao){
@@ -102,6 +132,7 @@ public class Agencia {
 				break;
 			case 8:
 				try {
+
 					FuncCarros.alugar_Carro(carros, clientes, cliente);
 				} catch (alugarExcecao e) {
 					System.out.println(e.getMessage());
@@ -114,9 +145,24 @@ public class Agencia {
 					System.out.println(e.getMessage());
 				}
 			case 10:
+				
+			//Executa a parte de codigo para adicionar um novo cliente
+					System.out.println("Digite o seu nome: ");
+					String nome2 = Ler.umaString();
+					System.out.println("Digite a sua cidade: ");
+					String cidade2 = Ler.umaString();
+					System.out.println("Digite a sua idade: ");
+					int idade2 = Ler.umInt();
+					System.out.println("Digite o seu NIF: ");
+					int NIF2 = Ler.umInt();
+					clientes.add(new Cliente(nome2,cidade2,idade2,NIF2));
+					cliente = clientes.size() - 1;
+					break;
+				
+			case 11:
 				System.out.println(FuncCarros.lista_Clientes(clientes));
 				break;
 			}
-		}while(opcao != 11);
+		}while(opcao != 12);
 	}
 }
