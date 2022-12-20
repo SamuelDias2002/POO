@@ -39,7 +39,7 @@ public class Agencia {
 		 * Ler ficheiro Carros
 		 */
 		try {
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream("D:\\\\Files POO\\\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("C:\\POOpratica\\MainProjeto\\src\\Carros.dat"));// ALTEREM SEMPRE A VOSSA DIRETORIA
 			carros = (ArrayList<Carro>) is.readObject();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -50,57 +50,14 @@ public class Agencia {
 	 * Ler ficheiro Clientes
 	 */
 		try {
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream("D:\\Files POO\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("C:\\POOpratica\\MainProjeto\\src\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
 			clientes = (ArrayList<Cliente>) is.readObject();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
-		/*
-		 * Verificar se é cliente (mas será que precisamos mesmo disto? Pois este menu vai ser dedicado a quem trabalha na Agencia)
-		 */
-		System.out.println("Já pertence á lista de clientes da agência?(Se sim digite Sim, caso contrário digite Nao) ");
-		String resposta = Ler.umaString();
-		if (resposta.toLowerCase().equals("sim")) {
-			System.out.println("Digite o seu nome:");
-			String nome = Ler.umaString();
-			if (clientes.size() < 0 ) {
-				for (int i = 0; i < clientes.size(); i++) {
-					if (clientes.get(i).getNome().equals(nome)) {
-						cliente = i; //Cliente que está a alugar o carro -> clientes.get(cliente)
-						System.out.println("Bem-vindo de volta " + clientes.get(i).getNome());
-					}
-				}
-			}
-			else {
-				throw new clienteException ("Não há clientes!");
-					}	
-		} else if (resposta.toLowerCase().equals("nao")) {
 
-			System.out.println("Digite o seu nome: ");
-			String nome = Ler.umaString();
-			System.out.println("Digite a sua cidade: ");
-			String cidade = Ler.umaString();
-			System.out.println("Digite a sua idade: ");
-			int idade = Ler.umInt();
-			System.out.println("Digite o seu NIF: ");
-			int NIF = Ler.umInt();
-			clientes.add(new Cliente(nome,cidade,idade,NIF));
-			cliente = clientes.size() - 1;
-		}
-		
-		/*
-		 * Escrever no ficheiro Clientes
-		 */
-		try {
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("D:\\\\Files POO\\\\Clientes.dat")); // ALTEREM SEMPRE A VOSSA DIRETORIA
-			os.writeObject(clientes);
-			os.flush();
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-		
 		/*
 		 * Função que torna a opções dadas no menu usaveis
 		 */
@@ -112,9 +69,13 @@ public class Agencia {
 				break;
 			case 2:
 				FuncCarros.lista_Carros(carros);
-
 				break;
 			case 3:
+				try{
+					FuncCarros.apaga_Carro(carros);
+				}catch(ApagarException e) {
+					System.out.println(e.getMessage());
+				}
 				break;
 			case 4:
 				try {
@@ -124,28 +85,28 @@ public class Agencia {
 				}
 				break;
 			case 5:
+				System.out.println(FuncCarros.mais_Alugado(carros));
 				break;
 			case 6:
 				System.out.println(FuncCarros.mais_Alugado(carros));
 				break;
 			case 7:
+				FuncCarros.Lista_CarrosAlugados(carros);
 				break;
 			case 8:
 				try {
-
-					FuncCarros.alugar_Carro(carros, clientes, cliente);
+					FuncCarros.alugar_Carro(carros, clientes);
 				} catch (alugarExcecao e) {
 					System.out.println(e.getMessage());
 				}
 				break;
 			case 9:
 				try {
-					FuncCarros.entregar_Carro(carros, clientes, cliente);
+					FuncCarros.entregar_Carro(carros, clientes);
 				} catch (EntregarException e) {
 					System.out.println(e.getMessage());
 				}
 			case 10:
-				
 			//Executa a parte de codigo para adicionar um novo cliente
 					System.out.println("Digite o seu nome: ");
 					String nome2 = Ler.umaString();
@@ -156,7 +117,6 @@ public class Agencia {
 					System.out.println("Digite o seu NIF: ");
 					int NIF2 = Ler.umInt();
 					clientes.add(new Cliente(nome2,cidade2,idade2,NIF2));
-					cliente = clientes.size() - 1;
 					break;
 				
 			case 11:
