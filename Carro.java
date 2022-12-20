@@ -7,8 +7,17 @@ public class Carro implements Serializable{
 		private double preco_compra, preco_aluguer;
 		private Date dataInicio;
 		private Date datafim;
+		private String alugado_por;
 		
 		
+		public String getAlugado_por() {
+				return alugado_por;
+		}
+
+		public void setAlugado_por(String alugado_por) {
+				this.alugado_por = alugado_por;
+		}
+
 		public Date getDataInicio() {
 			return dataInicio;
 		}

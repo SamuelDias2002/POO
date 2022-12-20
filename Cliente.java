@@ -24,7 +24,7 @@ public class Cliente implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Clientes\nNome: " + nome + "\nCidade: " + cidade + "\nIdade: " + idade + "\nNIF:" + NIF
+		return "\nNome: " + nome + "\nCidade: " + cidade + "\nIdade: " + idade + "\nNIF:" + NIF
 				+ "\nNúmero de carros alugados: " + carros_Alugados + "\nCarros alugados: " + carrosAlugados;
 	}
 }
