@@ -7,8 +7,17 @@ public class Carro implements Serializable{
 		private double preco_compra, preco_aluguer;
 		private Date dataInicio;
 		private Date datafim;
+		private String alugado_por;
 		
 		
+		public String getAlugado_por() {
+				return alugado_por;
+		}
+
+		public void setAlugado_por(String alugado_por) {
+				this.alugado_por = alugado_por;
+		}
+
 		public Date getDataInicio() {
 			return dataInicio;
 		}
@@ -81,9 +90,9 @@ public class Carro implements Serializable{
 		}
 		@Override
 		public String toString() {
-			return "Carros\nMarca: " + marca + "\nModelo: " + modelo + "\nAlugado: " + alugado + "\nAno: " + ano + "\nKm: "
+			return "Marca: " + marca + "\nModelo: " + modelo + "\nAlugado: " + alugado + "\nAno: " + ano + "\nKm: "
 					+ km + "\nCilindrada: " + cilindrada + "\nPotência: " + potencia + "\nPreço de compra: " + preco_compra
-					+ "\nPreço de aluguer: " + preco_aluguer + '}';
+					+ "\nPreço de aluguer: " + preco_aluguer + "\n";
 		}
 		public Carro(String marca, String modelo, int ano, int km, int cilindrada, int potencia, double preco_compra,
 				double preco_aluguer) {

@@ -1,23 +1,26 @@
 import java.io.*;
 import java.util.ArrayList;
 public class Agencia {
-	
+	static String nome_Agencia = "AGÊNCIA GMS"; // Alterar consoante o nome que pretender
 	/*
 	 * Menu que contem todas as opções que o utilizador pode usufruir
 	 */
 	public static int menu() {
 		int opcao;
-		System.out.println("\n1 - Novo carro");
+		System.out.println("");
+		System.out.println("\t\t\t\t\tBEM VINDO À " + nome_Agencia);
+		System.out.println("1 - Novo carro");
+		//Carros premium - Carros mais caros para alugar - Preço de aluguer >= 100$ por dia
 		System.out.println("2 - Listar todos os carros (todos ou apenas premium ou apenas comercial)");
 		System.out.println("3 - Apagar carro");
 		System.out.println("4 - Consultar carros");
-		System.out.println("5 – Qual a marca mais alugada");
-		System.out.println("6 – Qual o carro (modelo) mais alugado");
-		System.out.println("7 – Consultar todos os carros alugados");
-		System.out.println("8 – Alugar carro");
-		System.out.println("9 - Entregar carro alugado anteriormente");
-		System.out.println("10 - Adicionar Cliente");
-		System.out.println("11 - Listar todos os clientes");
+		System.out.println("5 - Criar ficha de cliente");
+		System.out.println("6 - Listar todos os clientes");		
+		System.out.println("7 – Alugar carro");
+		System.out.println("8 - Entregar carro alugado anteriormente");
+		System.out.println("9 – Qual o carro (marca e modelo) mais alugado");
+		System.out.println("10 – Consultar todos os carros alugados");
+		System.out.println("11 – Melhor(es) cliente(s) da agência"); //Os que alugaram mais carros
 		System.out.println("12 - Sair");
 		System.out.println("\nQual a sua opção:");
 		opcao = Ler.umInt();
@@ -85,42 +88,43 @@ public class Agencia {
 				}
 				break;
 			case 5:
-				System.out.println(FuncCarros.mais_Alugado(carros));
+				//Executa a parte de codigo para adicionar um novo cliente
+				FuncCarros.AdicionarCliente(clientes);
 				break;
 			case 6:
-				System.out.println(FuncCarros.mais_Alugado(carros));
+				FuncCarros.lista_Clientes(clientes);
 				break;
 			case 7:
-				FuncCarros.Lista_CarrosAlugados(carros);
-				break;
-			case 8:
 				try {
 					FuncCarros.alugar_Carro(carros, clientes);
 				} catch (alugarExcecao e) {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case 9:
+			case 8:
 				try {
 					FuncCarros.entregar_Carro(carros, clientes);
 				} catch (EntregarException e) {
 					System.out.println(e.getMessage());
 				}
+				break;
+			case 9:
+				try {
+					System.out.println(FuncCarros.mais_Alugado(carros));
+				} catch (Mais_Alugado_Exception e1) {
+		
+					System.out.println(e1.getMessage());
+				}
+				break;
 			case 10:
-			//Executa a parte de codigo para adicionar um novo cliente
-					System.out.println("Digite o seu nome: ");
-					String nome2 = Ler.umaString();
-					System.out.println("Digite a sua cidade: ");
-					String cidade2 = Ler.umaString();
-					System.out.println("Digite a sua idade: ");
-					int idade2 = Ler.umInt();
-					System.out.println("Digite o seu NIF: ");
-					int NIF2 = Ler.umInt();
-					clientes.add(new Cliente(nome2,cidade2,idade2,NIF2));
-					break;
-				
+				FuncCarros.Lista_CarrosAlugados(carros);
+				break;
 			case 11:
-				System.out.println(FuncCarros.lista_Clientes(clientes));
+				try {
+					System.out.println(FuncCarros.melhor_Cliente(clientes));
+				}catch(clienteException e) {
+					System.out.println(e.getMessage());
+				}
 				break;
 			}
 		}while(opcao != 12);
