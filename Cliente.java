@@ -10,21 +10,26 @@ public class Cliente implements Serializable{
 		this.cidade = cidade;
 		this.idade = idade;
 		NIF = nIF;
-		carros_Alugados = 0;
 		carrosAlugados = new ArrayList<Carro>();
 	}
 	public String getNome() {
 		return nome;
 	}
+	public String getCidade() {
+		return cidade;
+	}
+	public int getNIF(){
+		return NIF;
+	}
 	public ArrayList<Carro> getCarrosAlugados(){
 		return carrosAlugados;
 	}
-	public void setCarro(Carro carro) {
+	public void adicionarCarroAlugado(Carro carro) {
 		carrosAlugados.add(carro);
 	}
 	@Override
 	public String toString() {
-		return "Clientes\nNome: " + nome + "\nCidade: " + cidade + "\nIdade: " + idade + "\nNIF:" + NIF
-				+ "\nNúmero de carros alugados: " + carros_Alugados + "\nCarros alugados: " + carrosAlugados;
+		return "\nNome: " + nome + "\nCidade: " + cidade + "\nIdade: " + idade + "\nNIF:" + NIF
+				+ "\nNúmero de carros alugados: " + carros_Alugados + "\nCarros alugados: " + carrosAlugados + "\n";
 	}
 }
